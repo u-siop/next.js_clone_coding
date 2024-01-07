@@ -1,9 +1,11 @@
 import classes from './Modal.module.css'
 
-function Modal({ children }){
+function Modal({ children, onClose }){
     return<>
-    <div className={classes.backdrop}/>
-    <dialog className={classes.modal}>{children}</dialog>
+    <div className={classes.backdrop} onClick={onClose}/>
+    <dialog open className={classes.modal}>
+        {children}
+    </dialog>
     </>
 }
 
