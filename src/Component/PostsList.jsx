@@ -4,14 +4,9 @@ import NewPost from './NewPost';
 import Modal from './Modal';
 import classes from './PostsList.module.css'
 
-function PostsList(){
-    const [ modalIsVisible, setModalIsVisible ] = useState(true);
+function PostsList({isPosting, onStopPosting}){
     const [ enterBody, setEnteredBody ] = useState('');
     const [ enterAuthor, setEnteredAuthor ] = useState('');
-
-    function hideModalHandler(){
-        setModalIsVisible(false);
-    }
 
     function bodyChangeHandler(event){
         setEnteredBody(event.target.value);
@@ -20,26 +15,36 @@ function PostsList(){
         setEnteredAuthor(event.target.value);
     }
 
-    let modalContent;
-
-    if (modalIsVisible){
-        modalContent = <Modal onClose={hideModalHandler}>
-        <NewPost
-            onBodyChange={bodyChangeHandler}
-            onAuthorChange={authorChangeHandler}
-        />
-    </Modal>
-    }
+    // let modalContent;
+    //
+    // if(modalContent){
+    //     modalContent =(
+    //         <Modal onClose={hideModalHandler}>
+    //             <NewPost
+    //                 onBodyChange={bodyChangeHandler}
+    //                 onAuthorChange={authorChangeHandler}
+    //             />
+    //         </Modal>
+    //     );
+    // }
 
     return(
         <>
-            {modalContent}
+            {isPosting && (
+                <Modal onClose={onStopPosting}>
+                    <NewPost
+                        onBodyChange={bodyChangeHandler}
+                        onAuthorChange={authorChangeHandler}
+                        onCancel={onStopPosting}
+                    />
+                </Modal>
+            )}
             <ul className={classes.posts}>
                 <Post author={enterAuthor} body={enterBody}/>
                 <Post author="Manuel" body="Check out the every course"/>
             </ul>
         </>
     );
-}
+} 
 
 export default PostsList;
