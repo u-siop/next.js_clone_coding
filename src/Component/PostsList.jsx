@@ -1,18 +1,15 @@
-import { useState } from 'react';
 import Post from './Post';
 import NewPost from './NewPost';
 import Modal from './Modal';
 import classes from './PostsList.module.css'
+import { useState } from 'react';
 
 function PostsList({isPosting, onStopPosting}){
-    const [ enterBody, setEnteredBody ] = useState('');
-    const [ enterAuthor, setEnteredAuthor ] = useState('');
+    const [posts, setPosts] = useState([]);
 
-    function bodyChangeHandler(event){
-        setEnteredBody(event.target.value);
-    }
-    function authorChangeHandler(event){
-        setEnteredAuthor(event.target.value);
+    function addPostHandler(postData){
+        // setPosts([postData, ...posts])      // postData : new post data, ...posts : exist data
+        setPosts((exisitingPosts) => [postData, ...exisitingPosts]);    // technicalliy better way to update
     }
 
     // let modalContent;
@@ -33,15 +30,13 @@ function PostsList({isPosting, onStopPosting}){
             {isPosting && (
                 <Modal onClose={onStopPosting}>
                     <NewPost
-                        onBodyChange={bodyChangeHandler}
-                        onAuthorChange={authorChangeHandler}
                         onCancel={onStopPosting}
+                        onAddPost={addPostHandler}
                     />
                 </Modal>
             )}
             <ul className={classes.posts}>
-                <Post author={enterAuthor} body={enterBody}/>
-                <Post author="Manuel" body="Check out the every course"/>
+                {posts.map((post) => <Post author={post.author} body={post.body} />)}
             </ul>
         </>
     );
